@@ -8,9 +8,6 @@ had_cru <- read.table(url, fill=TRUE)
 
 # drop the other cols
 had_cru <- had_cru[c(1,2)]
-rownames(had_cru) <- had_cru[,1]
-
-
 names(had_cru)[1] <- "year"
 names(had_cru)[2] <- "temp"
 
