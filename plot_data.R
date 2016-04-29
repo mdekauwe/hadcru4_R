@@ -18,4 +18,5 @@ ggplot(cru, aes(year, temp)) +
        geom_point(size=0.8) +
        xlab("Year") +
        ylab("Temperature anomaly (1961-1990; deg C)") +
-       theme(aspect.ratio=golden_ratio)
+       theme(aspect.ratio=golden_ratio) +
+       stat_smooth(method="gam", formula=y~s(x), size=1)
