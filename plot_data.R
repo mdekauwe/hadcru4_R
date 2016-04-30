@@ -1,5 +1,6 @@
 #!/usr/bin/Rscript
 library("ggplot2")
+library(grid)
 require(mgcv)
 require(gridExtra)
 
@@ -15,7 +16,8 @@ golden_ratio <- 1.0 / 1.6180339887
 ax1 <- ggplot(cru, aes(year, temp)) +
          geom_point(size=0.8) +
          xlab("") +
-         ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
+         ylab("") +
+         #ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
          geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
          stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7) +
          theme_bw() +
@@ -47,7 +49,8 @@ ax2 <- ggplot() +
          geom_line(data=df2, aes(year, temp), size=0.8, colour="lightgreen") +
          geom_ribbon(data=df, aes(year, ymin=lcl, ymax=ucl),
                      fill="grey", alpha=.4) +
-         ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
+         ylab("") +
+         #ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
          geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
          stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7) +
          theme_bw() +
@@ -55,4 +58,8 @@ ax2 <- ggplot() +
               panel.grid.major=element_blank(),
               panel.grid.minor=element_blank())
 
-grid.arrange(ax1, ax2, ncol=1)
+label <- textGrob(expression(Temperature~anomaly~(~degree~C)~1961-1990),
+                  rot=90, vjust=4.5)
+grid.arrange(ax1, ax2, ncol=1, left=label)
+#grid.arrange(p1, p2, p3, p4, nrow=2, legend=legend, main ="Sensitivity", left = "Pvalue")
+#dev.off()
