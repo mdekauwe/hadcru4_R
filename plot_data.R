@@ -20,3 +20,10 @@ ggplot(cru, aes(year, temp)) +
        theme(aspect.ratio=golden_ratio,
              panel.grid.major=element_blank(),
              panel.grid.minor=element_blank())
+
+# Check if AR1 model is a better fit
+g1 <- gamm(temp~s(year, k=20), data=cru)
+g2 <- gamm(temp~s(year, k=20), data=cru, correlation=corARMA(form=~year, p=1))
+
+# AR1 model is best...god knows how you plot that instead :P
+anova(g1$lme, g2$lme)
