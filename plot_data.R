@@ -7,10 +7,13 @@ require(gridExtra)
 fn <- "HadCRUT_data.txt"
 cru <- read.table(fn, fill=TRUE)
 
+
+
 # drop the other cols
 cru <- cru[c(1,2)]
 names(cru)[1] <- "year"
 names(cru)[2] <- "temp"
+nvals = length(cru$year)
 
 # Check if AR1 model is a better fit as each year isn't truly independent
 g1 <- gamm(temp~s(year, k=20), data=cru)
@@ -22,11 +25,11 @@ anova(g1$lme, g2$lme)
 gam <- predict(g1$gam, data=cru)
 ar1 <- predict(g2$gam, data=cru)
 se <- predict(g2$gam, data=cru, se=TRUE)$se.fit
-df <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year)),
+df <- with(cru, data.frame(year=seq(min(year), max(year), length=nvals)),
                            temp=ar1,
                            lcl=ar1 - 1.96 * se,
                            ucl=ar1 + 1.96 * se))
-df2 <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year)),
+df2 <- with(cru, data.frame(year=seq(min(year), max(year), length=nvals),
                            temp=gam))
 
 # Plot the ggplot gam and compare to the version I've estimated above
@@ -39,7 +42,7 @@ ax1 <- ggplot(cru, aes(year, temp)) +
          ylab("") +
          #ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
          geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
-         stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7) +
+         stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7, n=nvals) +
          theme_bw() +
          theme(aspect.ratio=golden_ratio,
                panel.grid.major=element_blank(),
