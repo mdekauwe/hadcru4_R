@@ -48,6 +48,7 @@ ax2 <- ggplot() +
          geom_ribbon(data=df, aes(year, ymin=lcl, ymax=ucl),
                      fill="grey", alpha=.4) +
          ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
+         xlab("Year") +
          geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
          stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7) +
          theme_bw() +
