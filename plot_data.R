@@ -32,7 +32,7 @@ anova(g1$lme, g2$lme)
 
 gam <- predict(g1$gam, data=cru)
 ar1 <- predict(g2$gam, data=cru)
-se <- predict(g2$gam, data=cru, se=TRUE)
+se <- predict(g2$gam, data=cru, se=TRUE)$se.fit
 df <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year)),
                            temp=ar1,
                            lcl=ar1 - 1.96 * se,
@@ -48,7 +48,6 @@ ax2 <- ggplot() +
          geom_ribbon(data=df, aes(year, ymin=lcl, ymax=ucl),
                      fill="grey", alpha=.4) +
          ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
-         xlab("Year") +
          geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
          stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7) +
          theme_bw() +
