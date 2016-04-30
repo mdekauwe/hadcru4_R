@@ -23,7 +23,8 @@ ax1 <- ggplot(cru, aes(year, temp)) +
          theme_bw() +
          theme(aspect.ratio=golden_ratio,
                panel.grid.major=element_blank(),
-               panel.grid.minor=element_blank())
+               panel.grid.minor=element_blank(),
+               plot.margin=unit(c(1,1,-0.5,1), "cm"))
 
 # Check if AR1 model is a better fit
 g1 <- gamm(temp~s(year, k=20), data=cru)
@@ -50,16 +51,17 @@ ax2 <- ggplot() +
          geom_ribbon(data=df, aes(year, ymin=lcl, ymax=ucl),
                      fill="grey", alpha=.4) +
          ylab("") +
+         xlab("Year") +
          #ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
          geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
          stat_smooth(method="gam", formula=y~s(x, k=20), size=0.7) +
          theme_bw() +
          theme(aspect.ratio=golden_ratio,
               panel.grid.major=element_blank(),
-              panel.grid.minor=element_blank())
+              panel.grid.minor=element_blank(),
+              plot.margin=unit(c(-0.5,1,1,1), "cm"))
 
 label <- textGrob(expression(Temperature~anomaly~(~degree~C)~1961-1990),
                   rot=90, vjust=4.5)
-grid.arrange(ax1, ax2, ncol=1, left=label)
-#grid.arrange(p1, p2, p3, p4, nrow=2, legend=legend, main ="Sensitivity", left = "Pvalue")
-#dev.off()
+g <- grid.arrange(ax1, ax2, ncol=1, left=label)
+ggsave("HadCRU4_temperature.pdf", g)
