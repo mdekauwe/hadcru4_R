@@ -30,9 +30,9 @@ g2 <- gamm(temp~s(year, k=20), data=cru, correlation=corARMA(form=~year, p=1))
 # AR1 model is best.
 anova(g1$lme, g2$lme)
 
-gam <- predict(g1$gam, data=cru)$fit
+gam <- predict(g1$gam, data=cru)
 ar1 <- predict(g2$gam, data=cru)
-se <- predict(g2$gam, data=cru, se=TRUE)$se.fit
+se <- predict(g2$gam, data=cru, se=TRUE)
 df <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year)),
                            temp=ar1,
                            lcl=ar1 - 1.96 * se,
