@@ -12,8 +12,7 @@ cru <- cru[c(1,2)]
 names(cru)[1] <- "year"
 names(cru)[2] <- "temp"
 
-
-# Check if AR1 model is a better fit
+# Check if AR1 model is a better fit as each year isn't truly independent
 g1 <- gamm(temp~s(year, k=20), data=cru)
 g2 <- gamm(temp~s(year, k=20), data=cru, correlation=corARMA(form=~year, p=1))
 
@@ -32,7 +31,7 @@ df2 <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year)),
 
 # Plot the ggplot gam and compare to the version I've estimated above
 # I'm not clear why the green and the top panel differ, my understanding is
-# they ought to be the same! 
+# they ought to be the same!
 golden_ratio <- 1.0 / 1.6180339887
 ax1 <- ggplot(cru, aes(year, temp)) +
          geom_point(size=0.8) +
