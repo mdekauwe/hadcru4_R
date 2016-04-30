@@ -5,7 +5,7 @@ require(mgcv)
 require(gridExtra)
 
 fn <- "HadCRUT_data.txt"
-cru <- read.table(url, fill=TRUE)
+cru <- read.table(fn, fill=TRUE)
 
 # drop the other cols
 cru <- cru[c(1,2)]
