@@ -29,17 +29,17 @@ g2 <- gamm(temp~s(year, k=20), data=cru, correlation=corARMA(form=~year, p=1))
 # AR1 model is best.
 anova(g1$lme, g2$lme)
 
-df <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year))))
-gam <- predict(g1$gam, newdata=df)
-ar1 <- predict(g2$gam, newdata=df)
-se <- predict(g2$gam, newdata=df, se=TRUE)$se.fit
-lcl <- ar1 - 1.96 * se
-ucl <- ar1 + 1.96 * se
+#gam <- predict(g1$gam, data=cru)$fit
+ar1 <- predict(g2$gam, data=cru)
+se <- predict(g2$gam, data=cru, se=TRUE)$se.fit
+df <- with(cru, data.frame(year=seq(min(year), max(year), length=length(year)),
+                           temp=ar1,
+                           lcl=ar1 - 1.96 * se,
+                           ucl=ar1 + 1.96 * se))
 
 ggplot() +
   geom_point(data=cru, aes(year, temp), size=0.8) +
-  geom_line(data=df, aes(year, ar1), size=0.8, colour="blue") +
-  geom_line(data=df, aes(year, gam), size=0.8, colour="lightgreen") +
+  geom_line(data=df, aes(year, temp), size=0.8, colour="blue") +
   geom_ribbon(data=df, aes(year, ymin=lcl, ymax=ucl), fill="grey", alpha=.4) +
   ylab(expression(Temperature~anomaly~(~degree~C)~1961-1990)) +
   geom_hline(yintercept=0.0, linetype="dashed", colour="lightgrey") +
