@@ -3,7 +3,7 @@ library("ggplot2")
 library(grid)
 require(mgcv)
 require(gridExtra)
-
+setwd("/Users/mq20101267/Desktop/hadcru4_R")
 fn <- "HadCRUT_data.txt"
 cru <- read.table(fn, fill=TRUE)
 
@@ -25,7 +25,7 @@ anova(g1$lme, g2$lme)
 gam <- predict(g1$gam, data=cru)
 ar1 <- predict(g2$gam, data=cru)
 se <- predict(g2$gam, data=cru, se=TRUE)$se.fit
-df <- with(cru, data.frame(year=seq(min(year), max(year), length=nvals)),
+df <- with(cru, data.frame(year=seq(min(year), max(year), length=nvals),
                            temp=ar1,
                            lcl=ar1 - 1.96 * se,
                            ucl=ar1 + 1.96 * se))
